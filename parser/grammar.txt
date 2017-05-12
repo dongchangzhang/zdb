@@ -1,0 +1,5 @@
+zsql -> { zselect | zinsert | zupdate | zdelete }
+zselect -> select column_list from table_list { null | where rule_list } { null | order by }
+zinsert -> insert into table_name { null | ( element_list ) } values ( value_list )
+zupdate -> update table_name set column_assign_list where rule_list
+zdelete -> delete { from table_name where rule_list | * from table_name }
