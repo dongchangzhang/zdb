@@ -7,7 +7,7 @@ class Token:
         self.id = None
         self.parent = None
         self.type, self.attribute = self.analysis(input, flag)
-        print(input, self.type, self.attribute)
+        print("token info", input, self.type, self.attribute)
     def __eq__(self,token):
         return self.type == token.type and self.attribute == token.attribute
     def __str__(self):
@@ -39,6 +39,13 @@ class Token:
             return END_STATE, None
         if len(input) == 0:
             return ERROR, ERROR_INPUT
+        isdigit = True
+        for d in input:
+            if d not in digits:
+                isdigit = False
+                break
+        if isdigit:
+            return VALUE, input
         for i in range(0, len(KEY_WORDS)):
             if input.upper() == KEY_WORDS[i].upper():
                 return TERMINATOR, i

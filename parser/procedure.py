@@ -218,7 +218,7 @@ def B(lex, its):
     '''
     tmp.append([])
     source = (None, 'columns')
-    action = (',', 'columns(lex, its')
+    action = (',', 'columns(lex, its)')
     is_func = (False, True)
     if do_action(lex, its, source, action, is_func):
         print('B -> , columns')
@@ -250,6 +250,7 @@ def table(lex, its):
         leaves.append(tmp[-1])
         tmp.pop()
         return True
+    tmp[-1] = []
     source = ('sql_select', 'C')
     action = ('sql_select(lex, its)', 'C(lex, its)')
     if do_action(lex, its, source, action, is_func):
@@ -258,14 +259,16 @@ def table(lex, its):
         leaves.append(tmp[-1])
         tmp.pop()
         return True
+    tmp[-1] = []
     source = ('sql_projection', 'C')
     action = ('sql_projection(lex, its)', 'C(lex, its)')
     if do_action(lex, its, source, action, is_func):
         print('table -> sql_projection C')
-        tmp.pop()
         header.append(Token('table', True))
         leaves.append(tmp[-1])
+        tmp.pop()
         return True
+    tmp[-1] = []
     source = (None, None, 'columns', None, 'table')
     action = ('avg', '[', 'columns(lex, its)', ']', 'table(lex, its)')
     is_func = (False, False, True, False, True)
