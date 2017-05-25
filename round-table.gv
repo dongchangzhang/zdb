@@ -1,0 +1,86 @@
+// Tree
+digraph {
+	1 [label=start]
+	2 [label=sql_projection]
+		1 -> 2
+	3 [label=PROJECTION]
+		2 -> 3
+	4 [label="["]
+		2 -> 4
+	5 [label=columns]
+		2 -> 5
+	6 [label="]"]
+		2 -> 6
+	7 [label="("]
+		2 -> 7
+	8 [label=table]
+		2 -> 8
+	9 [label=")"]
+		2 -> 9
+	10 [label=sql_select]
+		8 -> 10
+	11 [label=C]
+		8 -> 11
+	12 [label=null]
+		11 -> 12
+	13 [label=SELECT]
+		10 -> 13
+	14 [label="["]
+		10 -> 14
+	15 [label=rules]
+		10 -> 15
+	16 [label="]"]
+		10 -> 16
+	17 [label="("]
+		10 -> 17
+	18 [label=table]
+		10 -> 18
+	19 [label=")"]
+		10 -> 19
+	20 [label=EMPLOYEE]
+		18 -> 20
+	21 [label=C]
+		18 -> 21
+	22 [label=JOIN]
+		21 -> 22
+	23 [label=table]
+		21 -> 23
+	24 [label=DEPARTMENT]
+		23 -> 24
+	25 [label=C]
+		23 -> 25
+	26 [label=null]
+		25 -> 26
+	27 [label=ENAME]
+		15 -> 27
+	28 [label=op]
+		15 -> 28
+	29 [label="'John'"]
+		15 -> 29
+	30 [label=A]
+		15 -> 30
+	31 [label="&"]
+		30 -> 31
+	32 [label=rules]
+		30 -> 32
+	33 [label=DNAME]
+		32 -> 33
+	34 [label=op]
+		32 -> 34
+	35 [label="'Research'"]
+		32 -> 35
+	36 [label=A]
+		32 -> 36
+	37 [label=null]
+		36 -> 37
+	38 [label="="]
+		34 -> 38
+	39 [label="="]
+		34 -> 39
+	40 [label=BDATE]
+		5 -> 40
+	41 [label=B]
+		5 -> 41
+	42 [label=null]
+		41 -> 42
+}

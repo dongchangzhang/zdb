@@ -3,17 +3,28 @@
 '''
 Lex
 '''
+from .token import Token
+from .const import *
+from string import digits
 class Lex:
     '''lex'''
     def __init__(self, sql):
         self.tokens = sql.split(' ')
         self.index = 0
 
-    def lookahead(self):
+    def get_iterator(self):
         ''''
-        get next token
+        get iterator
         '''
-        while len(self.tokens) > self.index:
-            yield self.tokens[self.index]
+        while True:
+            if self.index >= len(self.tokens):
+                yield Token(None)
+            else:
+                input = self.tokens[self.index]
+                yield Token(input)
             self.index += 1
-        yield None
+    def lookahead(self, its):
+        return next(its)
+    def rollback(self):
+        if self.index > -1:
+            self.index -= 1
