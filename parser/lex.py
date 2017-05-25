@@ -21,6 +21,7 @@ class Lex:
                 yield Token(None)
             else:
                 input = self.tokens[self.index]
+                print("->    %s" % input)
                 yield Token(input)
             self.index += 1
     def lookahead(self, its):

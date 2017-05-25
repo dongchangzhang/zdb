@@ -58,6 +58,7 @@ def do_rollback(lex, times):
 def do_action(lex, its, source, action, is_func, special = ()):
     times = 0
     token = None
+    print(action)
     for i in range(len(action)):
         if is_func[i]:
             if i in special:
@@ -79,6 +80,7 @@ def start(lex, its):
     the start of parser
     start -> sql_select | sql_projection
     '''
+    print("# start")
     if sql_select(lex, its):
         print("start -> sql_select")
         header.append(Token('start', True))
@@ -97,6 +99,8 @@ def sql_select(lex, its):
     sql_select -> select [ rules ] ( table )
 
     '''
+    print("# select")
+
     tmp.append([])
     source = (None, None, 'rules', None, None, 'table', None)
     action = ('select', '[', 'rules(lex, its)', ']', '(', 'table(lex, its)', ')')
@@ -115,6 +119,8 @@ def sql_projection(lex, its):
     '''
     sql_projection -> projection [ columns ] ( table )
     '''
+    print("# projection")
+
     tmp.append([])
     source = (None, None, 'columns', None, None, 'table', None)
     action = ('projection', '[', 'columns(lex, its)', ']', '(', 'table(lex, its)', ')')
@@ -133,6 +139,8 @@ def rules(lex, its):
     '''
     rules -> id op value A
     '''
+    print("# rules")
+
     tmp.append([])
     source = ('id', 'op', 'value', 'A')
     action = ('token.is_id()', 'op(lex, its)', 'token.is_value()', 'A(lex, its)')
@@ -152,6 +160,8 @@ def op(lex, its):
     | <
     | >
     '''
+    print("# op")
+
     token = lex.lookahead(its)
     if token.equal('='):
         print('op -> =')
@@ -175,6 +185,8 @@ def A(lex, its):
     A -> null
     | & rules
     '''
+    print("# A")
+
     tmp.append([])
 
     source = (None, 'rules')
@@ -196,6 +208,8 @@ def columns(lex, its):
     '''
     columns -> id B
     '''
+    print("# columns")
+
     tmp.append([])
 
     source = ('id', 'B')
@@ -216,6 +230,8 @@ def B(lex, its):
     B -> null
     | , columns
     '''
+    print("# B")
+
     tmp.append([])
     source = (None, 'columns')
     action = (',', 'columns(lex, its)')
@@ -239,6 +255,8 @@ def table(lex, its):
     | sql_projection C
     | avg [ columns ] table
     '''
+    print("# table id c")
+
     tmp.append([])
     source = ('id', 'C')
     action = ('token.is_id()', 'C(lex, its)')
@@ -250,6 +268,8 @@ def table(lex, its):
         leaves.append(tmp[-1])
         tmp.pop()
         return True
+    print("# table select c")
+
     tmp[-1] = []
     source = ('sql_select', 'C')
     action = ('sql_select(lex, its)', 'C(lex, its)')
@@ -259,6 +279,8 @@ def table(lex, its):
         leaves.append(tmp[-1])
         tmp.pop()
         return True
+    print("# table projection c")
+
     tmp[-1] = []
     source = ('sql_projection', 'C')
     action = ('sql_projection(lex, its)', 'C(lex, its)')
@@ -268,10 +290,12 @@ def table(lex, its):
         leaves.append(tmp[-1])
         tmp.pop()
         return True
+    print("# table avg")
+
     tmp[-1] = []
-    source = (None, None, 'columns', None, 'table')
-    action = ('avg', '[', 'columns(lex, its)', ']', 'table(lex, its)')
-    is_func = (False, False, True, False, True)
+    source = (None, None, 'columns', None, None, 'table', None)
+    action = ('avg', '[', 'columns(lex, its)', ']', '(', 'table(lex, its)', ')')
+    is_func = (False, False, True, False, False, True, False)
     if do_action(lex, its, source, action, is_func):
         print('table ->  avg [ columns ] table')
         header.append(Token('table', True))
@@ -287,6 +311,8 @@ def C(lex, its):
     C -> null
     | join table
     '''
+    print("# C")
+
     tmp.append([])
     source = (None, 'table')
     action = ('join', 'table(lex, its)')

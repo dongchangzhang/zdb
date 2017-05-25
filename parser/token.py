@@ -7,7 +7,7 @@ class Token:
         self.id = None
         self.parent = None
         self.type, self.attribute = self.analysis(input, flag)
-        print("token info", input, self.type, self.attribute)
+        # print("token info", input, self.type, self.attribute)
     def __eq__(self,token):
         return self.type == token.type and self.attribute == token.attribute
     def __str__(self):
