@@ -4,18 +4,18 @@
 start -> sql_select
         | sql_projection
 
-sql_select -> select [ rules ] ( table )
+sql_select -> select [ condiction ] ( table )
 
 sql_projection -> projection [ columns ] ( table )
 
-rules -> id op value A
+condiction -> id op value A
 
 op -> =
     | <
     | >
 
 A -> null
-    | & rules
+    | & condiction
 
 columns -> id B
 
@@ -48,17 +48,16 @@ def fill_tmp(i, token, source):
     elif source[i] != None:
         tmp[-1].append(Token(source[i], True))
     else:
-        tmp[-1].append(token)
+        if not token.no_use():
+            tmp[-1].append(token)
 
 def do_rollback(lex, times):
     for i in range(times):
-        tmp[-1].pop()
         lex.rollback()
 
 def do_action(lex, its, source, action, is_func, special = ()):
     times = 0
     token = None
-    print(action)
     for i in range(len(action)):
         if is_func[i]:
             if i in special:
@@ -96,18 +95,18 @@ def start(lex, its):
 
 def sql_select(lex, its):
     '''
-    sql_select -> select [ rules ] ( table )
+    sql_select -> select [ condiction ] ( table )
 
     '''
     print("# select")
 
     tmp.append([])
-    source = (None, None, 'rules', None, None, 'table', None)
-    action = ('select', '[', 'rules(lex, its)', ']', '(', 'table(lex, its)', ')')
+    source = (None, None, 'condiction', None, None, 'table', None)
+    action = ('select', '[', 'condiction(lex, its)', ']', '(', 'table(lex, its)', ')')
     is_func = (False, False, True, False, False, True, False)
 
     if do_action(lex, its, source, action, is_func):
-        print('sql_select -> select [ rules ] ( table )')
+        print('sql_select -> select [ condiction ] ( table )')
         header.append(Token('sql_select', True))
         leaves.append(tmp[-1])
         tmp.pop()
@@ -135,11 +134,11 @@ def sql_projection(lex, its):
     tmp.pop()
     return False
 
-def rules(lex, its):
+def condiction(lex, its):
     '''
-    rules -> id op value A
+    condiction -> id op value A
     '''
-    print("# rules")
+    print("# condiction")
 
     tmp.append([])
     source = ('id', 'op', 'value', 'A')
@@ -147,8 +146,8 @@ def rules(lex, its):
     is_func = (True, True, True, True)
     special = (0, 2)
     if do_action(lex, its, source, action, is_func, special):
-        print("rules -> id op value A")
-        header.append(Token('rules', True))
+        print("condiction -> id op value A")
+        header.append(Token('condiction', True))
         leaves.append(tmp[-1])
         tmp.pop()
         return True
@@ -183,17 +182,17 @@ def op(lex, its):
 def A(lex, its):
     '''
     A -> null
-    | & rules
+    | & condiction
     '''
     print("# A")
 
     tmp.append([])
 
-    source = (None, 'rules')
-    action = ('&', 'rules(lex, its)')
+    source = (None, 'condiction')
+    action = ('&', 'condiction(lex, its)')
     is_func = (False, True)
     if do_action(lex, its, source, action, is_func):
-        print('A-> & rules')
+        print('A-> & condiction')
         header.append(Token('A', True))
         leaves.append(tmp[-1])
         tmp.pop()

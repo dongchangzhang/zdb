@@ -26,6 +26,10 @@ class Token:
         return self.type == TERMINATOR
     def is_end(self):
         return self.type == END_STATE
+    def no_use(self):
+        if self.type == TERMINATOR and KEY_WORDS[self.attribute] in ['[', ']', '(', ')']:
+            return True
+        return False
     def equal(self, input):
         if self.type != TERMINATOR:
             return False
